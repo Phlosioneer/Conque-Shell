@@ -597,7 +597,8 @@ function! conque_term#key_press() "{{{
     sil let v:char = ''
 endfunction " }}}
 
-" set key mappings and auto commands
+
+" set key mappings and auto 
 function! conque_term#set_mappings(action) "{{{
 
     " set action {{{
@@ -655,7 +656,9 @@ function! conque_term#set_mappings(action) "{{{
         if l:action == 'start'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(' . c . ')<CR>'
         else
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '>'
+			" NOTE: Disabled as a hack to prevent mapping-not-found errors
+			" when a shell closes.
+            " sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '>'
         endif
     endfor
     " bonus mapping: send <C-c> in normal mode to terminal as well for panic interrupts
@@ -663,8 +666,10 @@ function! conque_term#set_mappings(action) "{{{
         sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-c> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(3)<CR>'
         sil exe 'n' . map_modifier . 'map <silent> <buffer> <C-c> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(3)<CR>'
     else
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-c>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> <C-c>'
+		" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+		" shell closes.
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-c>'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> <C-c>'
     endif
 
     " leave insert mode
@@ -673,7 +678,9 @@ function! conque_term#set_mappings(action) "{{{
         if l:action == 'start'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(27)<CR>'
         else
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc>'
+			" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+			" shell closes.
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc>'
         endif
     else
         " use <Esc> to send <Esc> to terminal
@@ -681,14 +688,21 @@ function! conque_term#set_mappings(action) "{{{
             sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey . ' <Esc>'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(27)<CR>'
         else
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc>'
+			
+			" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+			" shell closes.
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc>'
         endif
     endif
 
     " Map <C-w> in insert mode
     if exists('g:ConqueTerm_CWInsert') && g:ConqueTerm_CWInsert == 1
-        inoremap <silent> <buffer> <C-w> <Esc><C-w>
+		" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+		" shell closes.
+		if l:action == 'start'
+        	inoremap <silent> <buffer> <C-w> <Esc><C-w>
+		endif
     endif
     " }}}
 
@@ -706,14 +720,18 @@ function! conque_term#set_mappings(action) "{{{
                 if l:action == 'start'
                     sil exe "i" . map_modifier . "map <silent> <buffer> <Bar> <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(124)<CR>"
                 else
-                    sil exe "i" . map_modifier . "map <silent> <buffer> <Bar>"
+					" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+					" shell closes.
+                    "sil exe "i" . map_modifier . "map <silent> <buffer> <Bar>"
                 endif
                 continue
             endif
             if l:action == 'start'
                 sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i) . " <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(" . i . ")<CR>"
             else
-                sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i)
+				" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+				" shell closes.
+                "sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i)
             endif
         endfor
     endif
@@ -754,16 +772,18 @@ function! conque_term#set_mappings(action) "{{{
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <End> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_vk(' . s:windows_vk.VK_END . ')<CR>'
         endif
     else
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <BS>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Space>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <S-BS>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <S-Space>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Up>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Down>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Right>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Left>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Home>'
-        sil exe 'i' . map_modifier . 'map <silent> <buffer> <End>'
+		" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+		" shell closes.
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <BS>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Space>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <S-BS>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <S-Space>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Up>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Down>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Right>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Left>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <Home>'
+        "sil exe 'i' . map_modifier . 'map <silent> <buffer> <End>'
     endif
     " }}}
 
@@ -798,18 +818,20 @@ function! conque_term#set_mappings(action) "{{{
                 sil exe 'i' . map_modifier . 'map <silent> <buffer> <F12> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_vk(' . s:windows_vk.VK_F12 . ')<CR>'
             endif
         else
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F1>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F2>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F3>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F4>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F5>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F6>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F7>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F8>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F9>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F10>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F11>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <F12>'
+			" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+			" shell closes.
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F1>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F2>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F3>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F4>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F5>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F6>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F7>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F8>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F9>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F10>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F11>'
+            "sil exe 'i' . map_modifier . 'map <silent> <buffer> <F12>'
         endif
     endif
     " }}}
@@ -833,18 +855,22 @@ function! conque_term#set_mappings(action) "{{{
         sil exe 'n' . map_modifier . 'map <silent> <buffer> ]p :' . s:py . ' ' . b:ConqueTerm_Var . '.write_expr("@@")<CR>a'
         sil exe 'n' . map_modifier . 'map <silent> <buffer> [p :' . s:py . ' ' . b:ConqueTerm_Var . '.write_expr("@@")<CR>a'
     else
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> p'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> P'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> ]p'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> [p'
+		" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+		" shell closes.
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> p'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> P'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> ]p'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> [p'
     endif
     if has('gui_running') == 1
         if l:action == 'start'
             sil exe 'i' . map_modifier . 'map <buffer> <S-Insert> <Esc>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_expr("@+")<CR>a'
             sil exe 'i' . map_modifier . 'map <buffer> <S-Help> <Esc>:<C-u>' . s:py . ' ' . b:ConqueTerm_Var . '.write_expr("@+")<CR>a'
         else
-            sil exe 'i' . map_modifier . 'map <buffer> <S-Insert>'
-            sil exe 'i' . map_modifier . 'map <buffer> <S-Help>'
+			" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+			" shell closes.
+            "sil exe 'i' . map_modifier . 'map <buffer> <S-Insert>'
+            "sil exe 'i' . map_modifier . 'map <buffer> <S-Help>'
         endif
     endif
     " }}}
@@ -858,12 +884,14 @@ function! conque_term#set_mappings(action) "{{{
         sil exe 'n' . map_modifier . 'map <silent> <buffer> s :echo "Change mode disabled in shell."<CR>'
         sil exe 'n' . map_modifier . 'map <silent> <buffer> S :echo "Change mode disabled in shell."<CR>'
     else
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> r'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> R'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> c'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> C'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> s'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> S'
+		" NOTE: Disabled as a hack to prevent mapping-not-found errors when a
+		" shell closes.
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> r'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> R'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> c'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> C'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> s'
+        "sil exe 'n' . map_modifier . 'map <silent> <buffer> S'
     endif
     " }}}
 
@@ -1405,10 +1433,13 @@ function! s:term_obj.close() dict " {{{
     " delete buffer if option is set
     if self.is_buffer
         call conque_term#set_mappings('stop')
-        if exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd
+        if !exists('b:setmodifiable')
+			sil exe 'set nomodifiable'
+		endif
+		if exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd
             sil exe 'bwipeout! ' . self.buffer_name
-            stopinsert!
         endif
+        stopinsert!
     endif
 
     " mark ourselves as inactive
