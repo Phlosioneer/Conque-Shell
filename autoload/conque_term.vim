@@ -494,10 +494,18 @@ function! conque_term#open(...) "{{{
     " open command
     try
         let options = {}
-        let options["TERM"] = g:ConqueTerm_TERM
+        let options["TERM"] = g:ConqueTerm_TERM 
         let options["CODE_PAGE"] = g:ConqueTerm_CodePage
         let options["color"] = g:ConqueTerm_Color
         let options["offset"] = 0 " g:ConqueTerm_StartMessages * 10
+
+		" Extra options are allowed by setting g:ConqueTerm_ExtraOptions
+		" ExtraOptions is an array of [option_name, option_value] arrays.
+		for option in g:ConqueTerm_ExtraOptions
+			let option_name = option[0]
+			let option_value = option[1]
+			let options[option_name] = option_value
+		endfor
 
         if s:platform == 'unix'
             execute s:py . ' ' . g:ConqueTerm_Var . ' = Conque()'
