@@ -566,7 +566,7 @@ function! conque_term#set_buffer_settings(command, vim_startup_commands) "{{{
         sil exe h
     endfor
     sil exe 'edit ++enc=utf-8 ' . g:ConqueTerm_BufName
-
+	
     " buffer settings 
     setlocal fileencoding=utf-8 " file encoding, even tho there's no file
     setlocal nopaste           " conque won't work in paste mode
@@ -1441,9 +1441,6 @@ function! s:term_obj.close() dict " {{{
     " delete buffer if option is set
     if self.is_buffer
         call conque_term#set_mappings('stop')
-        if !exists('b:setmodifiable')
-			sil exe 'set nomodifiable'
-		endif
 		if exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd
             sil exe 'bwipeout! ' . self.buffer_name
         endif
